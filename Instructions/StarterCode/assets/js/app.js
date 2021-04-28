@@ -34,8 +34,6 @@ d3.csv("./data.csv").then(function(demoData) {
         data.smokers = +data.smokers;
         data.age = +data.age;
 
-    });
-
     // Create scaling functions
     var xSmokersScale = d3.scaleSmokers()
     .domain(d3.extent(demoData, d => d.smokers))
@@ -75,9 +73,11 @@ d3.csv("./data.csv").then(function(demoData) {
 chartGroup.selectAll(".plot")
   .data(dataArray)
   .enter()
-  .append("rect")
+  .append("scattered")
   .classed("plot", true)
-  .attr("x", (d, i) => xScale(demoCategories[i]))
+  .attr("x", (d, i) => xScale(demoSmokers[i]))
   .attr("y", d => yScale(d))
   .attr("width", xScale.bandwidth())
   .attr("height", d => chartHeight - yScale(d));
+}
+});
