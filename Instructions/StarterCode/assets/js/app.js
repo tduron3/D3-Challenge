@@ -35,9 +35,18 @@ d3.csv("./data.csv").then(function(demoData) {
     });
 
     var xTimeScale = d3.scaleTime()
-        .domain(d3.extent(demoData, d => d.age))
-        .range([0, width]);
+    .domain(d3.extent(demoData, d => d.date))
+    .range([0, width]);
 
-    var yLinearScale = d3.scaleLinear().range([height, 0]);
+    var yLinearScale1 = d3.scaleLinear()
+    .domain([0, d3.max(demoData, d => d.age)])
+    .range([height, 0]);
 
-    var 
+    var yLinearScale2 = d3.scaleLinear()
+    .domain([0, d3.max(demoData, d => d.poverty)])
+    .range([height, 0]);
+
+    var bottomAxis = d3.axisBottom(xTimeScale)
+    .tickFormat(d3.timeFormat("%d-%b-%Y"));
+    var leftAxis = d3.axisLeft(yLinearScale1);
+    var rightAxis = d3.axisRight(yLinearScale2);
