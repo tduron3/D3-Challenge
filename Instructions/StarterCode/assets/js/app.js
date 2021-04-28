@@ -53,12 +53,10 @@ d3.csv("./data.csv").then(function(demoData) {
     // Add x-axis
     chartGroup.append("g")
     .attr("transform", `translate(0, ${height})`)
-    .call(bottomAxis);
+    .call(xAxis);
 
     // Add y1-axis to the left side of the display
     chartGroup.append("g")
-
-  // Define the color of the axis text
     .classed("blue", true)
     .call(leftAxis);
 
@@ -73,11 +71,13 @@ d3.csv("./data.csv").then(function(demoData) {
     .attr("d", line1)
     .classed("line green", true);
 
-    // Append axes titles
-    chartGroup.append("text")
-    .attr("transform", `translate(${width / 2}, ${height + margin.top + 20})`)
-      .classed("smokers-text text", true)
-      .text("Smokers");
-}).catch(function(error) {
-    console.log(error);
-});
+// Append axes titles
+chartGroup.selectAll(".plot")
+  .data(dataArray)
+  .enter()
+  .append("rect")
+  .classed("plot", true)
+  .attr("x", (d, i) => xScale(demoCategories[i]))
+  .attr("y", d => yScale(d))
+  .attr("width", xScale.bandwidth())
+  .attr("height", d => chartHeight - yScale(d));
