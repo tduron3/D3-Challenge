@@ -62,7 +62,13 @@ d3.csv("./data.csv").then(function(demoData) {
     .classed("blue", true)
     .call(leftAxis);
 
-     // Line generators for each line
-  var line = d3.line()
-  .x(d => xSmokerScale(d.smokers))
-  .y(d => yLinearScale1(d.age)); 
+    // Line generators for each line
+    var line = d3.line()
+    .x(d => xSmokerScale(d.smokers))
+    .y(d => yLinearScale1(d.age)); 
+
+    // Append a path for line1
+    chartGroup.append("path")
+    .data([smurfData])
+    .attr("d", line1)
+    .classed("line green", true);
