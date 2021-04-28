@@ -69,6 +69,15 @@ d3.csv("./data.csv").then(function(demoData) {
 
     // Append a path for line1
     chartGroup.append("path")
-    .data([smurfData])
+    .data([demoData])
     .attr("d", line1)
     .classed("line green", true);
+
+    // Append axes titles
+    chartGroup.append("text")
+    .attr("transform", `translate(${width / 2}, ${height + margin.top + 20})`)
+      .classed("smokers-text text", true)
+      .text("Smokers");
+}).catch(function(error) {
+    console.log(error);
+});
