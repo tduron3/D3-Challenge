@@ -22,30 +22,31 @@ var svg = d3
 var chartGroup = svg.append("g")
   .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
+
+//Import data from CSV
+
 d3.csv("./data.csv").then(function(demoData) {
 
     console.log(data);
+ 
 
+// Format the Data
     demodata.forEach(function(data) {
-        data.healthcare = +data.healthcare;
-        data.poverty = +data.poverty;
         data.smokers = +data.smokers;
         data.age = +data.age;
 
     });
 
-    var xTimeScale = d3.scaleTime()
-    .domain(d3.extent(demoData, d => d.date))
+    // Create scaling functions
+    var xSmokersScale = d3.scaleSmokers()
+    .domain(d3.extent(demoData, d => d.Ssmokers))
     .range([0, width]);
 
     var yLinearScale1 = d3.scaleLinear()
     .domain([0, d3.max(demoData, d => d.age)])
     .range([height, 0]);
 
-    var yLinearScale2 = d3.scaleLinear()
-    .domain([0, d3.max(demoData, d => d.poverty)])
-    .range([height, 0]);
-
+   // Create axis functions
     var bottomAxis = d3.axisBottom(xTimeScale)
     .tickFormat(d3.timeFormat("%d-%b-%Y"));
     var leftAxis = d3.axisLeft(yLinearScale1);
