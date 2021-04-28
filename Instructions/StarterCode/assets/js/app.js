@@ -29,7 +29,6 @@ d3.csv("./data.csv").then(function(demoData) {
 
     console.log(data);
  
-
 // Format the Data
     demodata.forEach(function(data) {
         data.smokers = +data.smokers;
@@ -39,7 +38,7 @@ d3.csv("./data.csv").then(function(demoData) {
 
     // Create scaling functions
     var xSmokersScale = d3.scaleSmokers()
-    .domain(d3.extent(demoData, d => d.Ssmokers))
+    .domain(d3.extent(demoData, d => d.smokers))
     .range([0, width]);
 
     var yLinearScale1 = d3.scaleLinear()
@@ -47,7 +46,23 @@ d3.csv("./data.csv").then(function(demoData) {
     .range([height, 0]);
 
    // Create axis functions
-    var bottomAxis = d3.axisBottom(xTimeScale)
+    var bottomAxis = d3.axisBottom(xSmokersScale)
     .tickFormat(d3.timeFormat("%d-%b-%Y"));
     var leftAxis = d3.axisLeft(yLinearScale1);
-    var rightAxis = d3.axisRight(yLinearScale2);
+
+    // Add x-axis
+    chartGroup.append("g")
+    .attr("transform", `translate(0, ${height})`)
+    .call(bottomAxis);
+
+    // Add y1-axis to the left side of the display
+    chartGroup.append("g")
+
+  // Define the color of the axis text
+    .classed("blue", true)
+    .call(leftAxis);
+
+     // Line generators for each line
+  var line = d3.line()
+  .x(d => xSmokerScale(d.smokers))
+  .y(d => yLinearScale1(d.age)); 
