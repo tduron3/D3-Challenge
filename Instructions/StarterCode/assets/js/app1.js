@@ -49,8 +49,24 @@ var svg = d3
 var chartGroup = svg.append("g")
   .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
+// Append a path for line1
+var path = svg.selectAll("dot")
+    chartGroup.append("path")
+    .data([demoData])
+    .attr("d", line1)
+    .classed("line green", true);
 
-
+    // Append axes titles
+chartGroup.selectAll(".plot")
+    .data(dataArray)
+    .enter()
+    .append("circle")
+    .classed("plot", true)
+    .attr("x", (d, i) => xScale(demoSmokers[i]))
+    .attr("y", d => yScale(d))
+    .attr("width", xScale.bandwidth())
+    .attr("height", d => chartHeight - yScale(d));
+    
    // Create axis functions
     var bottomAxis = d3.axisBottom(xSmokersScale)
     .tickFormat(d3.timeFormat("%d-%b-%Y"));
@@ -66,18 +82,12 @@ var chartGroup = svg.append("g")
     .classed("blue", true)
     .call(leftAxis);
 
-    
-    // Append a path for line1
-    chartGroup.append("path")
-    .data([demoData])
-    .attr("d", line1)
-    .classed("line green", true);
 
 // Append axes titles
 chartGroup.selectAll(".plot")
   .data(dataArray)
   .enter()
-  .append("scattered")
+  .append("circle")
   .classed("plot", true)
   .attr("x", (d, i) => xScale(demoSmokers[i]))
   .attr("y", d => yScale(d))
