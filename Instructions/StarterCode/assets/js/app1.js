@@ -34,6 +34,12 @@ var height = svgHeight - margin.top - margin.bottom;
     .domain([0, d3.max(demoData, d => d.age)])
     .range([height, 0]);
 
+ // Line generators for each line
+ var line = d3.line()
+    .x(d => xSmokerScale(d.smokers))
+    .y(d => yLinearScale1(d.age)); 
+
+
 var svg = d3
   .select("#scatter")
   .append("svg")
@@ -44,14 +50,6 @@ var chartGroup = svg.append("g")
   .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
 
-    // Create scaling functions
-    var xSmokersScale = d3.scaleSmokers()
-    .domain(d3.extent(demoData, d => d.smokers))
-    .range([0, width]);
-
-    var yLinearScale1 = d3.scaleLinear()
-    .domain([0, d3.max(demoData, d => d.age)])
-    .range([height, 0]);
 
    // Create axis functions
     var bottomAxis = d3.axisBottom(xSmokersScale)
@@ -68,11 +66,7 @@ var chartGroup = svg.append("g")
     .classed("blue", true)
     .call(leftAxis);
 
-    // Line generators for each line
-    var line = d3.line()
-    .x(d => xSmokerScale(d.smokers))
-    .y(d => yLinearScale1(d.age)); 
-
+    
     // Append a path for line1
     chartGroup.append("path")
     .data([demoData])
