@@ -70,7 +70,19 @@ function makeResponsive() {
                 chartGroup.append("path")
                 .data([demoData])
                 .attr("d", line1)
-                .classed("line green", true);         
+                .classed("line green", true);      
+                
+            // append circles
+            var circlesGroup = chartGroup.selectAll("circle")
+                .data(medalData)
+                .enter()
+                .append("circle")
+                .attr("cx", d => xTimeScale(d.date))
+                .attr("cy", d => yLinearScale(d.medals))
+                .attr("r", "10")
+                .attr("fill", "gold")
+                .attr("stroke-width", "1")
+                .attr("stroke", "black");       
 
 // function used for updating circles group with a transition to
 // new circles
