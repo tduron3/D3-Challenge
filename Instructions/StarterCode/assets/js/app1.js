@@ -4,6 +4,14 @@
 // automatically resizes the chart
 function makeResponsive() {
 
+    // if the SVG area isn't empty when the browser loads,
+    // remove it and replace it with a resized version of the chart
+    var svgArea = d3.select("body").select("svg");
+
+    // clear svg is not empty
+    if (!svgArea.empty()) {
+        svgArea.remove();
+    }
 
     var svgWidth = 960;
     var svgHeight = 500;
@@ -83,35 +91,22 @@ function makeResponsive() {
                 .attr("fill", "pink")
                 .attr("opacity", ".5");
 
-           
-
-// function used for updating circles group with a transition to
-// new circles
-function renderCircles(circlesGroup, newXScale, chosenXAxis) {
-
-    circlesGroup.transition()
-      .duration(1000)
-      .attr("cx", d => newXScale(d[chosenXAxis]));
+            var toolTip = d3.tip()
+                .attr("class", "tooltip")
+                .offset([80, -60])
+                .html(function(d) {
+                    return (`${d.abbr}<br>${label} ${d[chosenXAxis]}`);
+                });
   
-    return circlesGroup;
-  }
-
-    var toolTip = d3.tip()
-      .attr("class", "tooltip")
-      .offset([80, -60])
-      .html(function(d) {
-        return (`${d.abbr}<br>${label} ${d[chosenXAxis]}`);
-      });
+            circlesGroup.call(toolTip);
   
-    circlesGroup.call(toolTip);
-  
-    circlesGroup.on("mouseover", function(data) {
-      toolTip.show(data);
-    })
-      // onmouseout event
-      .on("mouseout", function(data, index) {
-        toolTip.hide(data);
-      });
+            circlesGroup.on("mouseover", function(data) {
+                toolTip.show(data);
+            })
+            // onmouseout event
+                .on("mouseout", function(data, index) {
+                    toolTip.hide(data);
+                });
   
     return circlesGroup;
   }
@@ -132,36 +127,6 @@ chartGroup.selectAll(".plot")
     .attr("width", xScale.bandwidth())
     .attr("height", d => chartHeight - yScale(d));
 
-
-    // append initial circles
-  var circlesGroup = chartGroup.selectAll("circle")
-    .data(hairData)
-    .enter()
-    .append("circle")
-    .attr("cx", d => xLinearScale(d[chosenXAxis]))
-    .attr("cy", d => yLinearScale(d.num_hits))
-    .attr("r", 20)
-    .attr("fill", "pink")
-    .attr("opacity", ".5");
-
-
-// Append axes titles
-chartGroup.selectAll(".plot")
-  .data(dataArray)
-  .enter()
-  .append("circle")
-  .classed("plot", true)
-  .attr("x", (d, i) => xScale(demoSmokers[i]))
-  .attr("y", d => yScale(d))
-  .attr("width", xScale.bandwidth())
-  .attr("height", d => chartHeight - yScale(d));
-}
-});
-
-
-d3.csv("./data.csv").then(function(demoData) {
-
-    console.log(data);
  
 // function used for updating circles group with a transition to
 // new circles
