@@ -71,18 +71,19 @@ function makeResponsive() {
                 .data([demoData])
                 .attr("d", line1)
                 .classed("line green", true);      
-                
-            // append circles
+             
+            // append initial circles
             var circlesGroup = chartGroup.selectAll("circle")
-                .data(medalData)
+                .data(hairData)
                 .enter()
                 .append("circle")
-                .attr("cx", d => xTimeScale(d.date))
-                .attr("cy", d => yLinearScale(d.medals))
-                .attr("r", "10")
-                .attr("fill", "gold")
-                .attr("stroke-width", "1")
-                .attr("stroke", "black");       
+                .attr("cx", d => xLinearScale(d[chosenXAxis]))
+                .attr("cy", d => yLinearScale(d.num_hits))
+                .attr("r", 20)
+                .attr("fill", "pink")
+                .attr("opacity", ".5");
+
+           
 
 // function used for updating circles group with a transition to
 // new circles
@@ -94,15 +95,6 @@ function renderCircles(circlesGroup, newXScale, chosenXAxis) {
   
     return circlesGroup;
   }
-  
-  // function used for updating circles group with new tooltip
-  function updateToolTip(chosenXAxis, circlesGroup) {
-  
-    var label;
-  
-    if (chosenXAxis === "smokes") {
-      label = "Percent Smokes";
-    }
 
     var toolTip = d3.tip()
       .attr("class", "tooltip")
@@ -128,27 +120,6 @@ function renderCircles(circlesGroup, newXScale, chosenXAxis) {
         data.smokers = +data.smokers;
         data.age = +data.age;
 
-   
-
- // Line generators for each line
- var line = d3.line()
-    .x(d => xSmokerScale(d.smokers))
-    .y(d => yLinearScale1(d.age)); 
-
-
-var svg = d3
-  .select("#scatter")
-  .append("svg")
-  .attr("width", svgWidth)
-  .attr("height", svgHeight);
-
-
-// Append a path for line1
-var path = svg.selectAll("dot")
-    chartGroup.append("path")
-    .data([demoData])
-    .attr("d", line1)
-    .classed("line green", true);
 
 // Append axes titles
 chartGroup.selectAll(".plot")
@@ -160,19 +131,6 @@ chartGroup.selectAll(".plot")
     .attr("y", d => yScale(d))
     .attr("width", xScale.bandwidth())
     .attr("height", d => chartHeight - yScale(d));
-
-
-    // Add x-axis
-    chartGroup.append("g")
-    .attr("transform", `translate(0, ${height})`)
-    .call(xAxis);
-
-    // Add y1-axis to the left side of the display
-    chartGroup.append("g")
-    .classed("blue", true)
-    .call(leftAxis);
-
-    
 
 
     // append initial circles
@@ -205,3 +163,13 @@ d3.csv("./data.csv").then(function(demoData) {
 
     console.log(data);
  
+// function used for updating circles group with a transition to
+// new circles
+function renderCircles(circlesGroup, newXScale, chosenXAxis) {
+
+    circlesGroup.transition()
+      .duration(1000)
+      .attr("cx", d => newXScale(d[chosenXAxis]));
+  
+    return circlesGroup;
+  }
