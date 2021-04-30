@@ -60,8 +60,17 @@ function makeResponsive() {
                 .classed("blue", true)
                 .call(leftAxis);
 
+            // Line generators for each line
+            var line = d3.line()
+                .x(d => xSmokerScale(d.smokers))
+                .y(d => yLinearScale1(d.age)); 
 
-
+            // Append a path for line1
+            var path = svg.selectAll("dot")
+                chartGroup.append("path")
+                .data([demoData])
+                .attr("d", line1)
+                .classed("line green", true);         
 
 // function used for updating circles group with a transition to
 // new circles
@@ -121,8 +130,6 @@ var svg = d3
   .attr("width", svgWidth)
   .attr("height", svgHeight);
 
-var chartGroup = svg.append("g")
-  .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
 // Append a path for line1
 var path = svg.selectAll("dot")
@@ -142,10 +149,6 @@ chartGroup.selectAll(".plot")
     .attr("width", xScale.bandwidth())
     .attr("height", d => chartHeight - yScale(d));
 
- // Create axis functions
-    var xAxis = d3.axisBottom(xSmokersScale)
-    .tickFormat(d3.timeFormat("%d-%b-%Y"));
-    var leftAxis = d3.axisLeft(yLinearScale1);
 
     // Add x-axis
     chartGroup.append("g")
@@ -157,11 +160,7 @@ chartGroup.selectAll(".plot")
     .classed("blue", true)
     .call(leftAxis);
 
-     // Line generators for each line
- var line = d3.line()
- .x(d => xSmokerScale(d.smokers))
- .y(d => yLinearScale1(d.age)); 
-
+    
 
 
     // append initial circles
