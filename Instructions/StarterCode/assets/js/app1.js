@@ -1,12 +1,5 @@
 // @TODO: YOUR CODE HERE!
 
-//Import data from CSV
-
-d3.csv("./data.csv").then(function(demoData) {
-
-    console.log(data);
- 
-
 var svgWidth = 960;
 var svgHeight = 500;
 
@@ -19,6 +12,21 @@ var margin = {
 
 var width = svgWidth - margin.left - margin.right;
 var height = svgHeight - margin.top - margin.bottom;
+
+// Create an SVG wrapper, append an SVG group that will hold our chart,
+// and shift the latter by left and top margins.
+var svg = d3
+  .select(".chart")
+  .append("svg")
+  .attr("width", svgWidth)
+  .attr("height", svgHeight);
+
+// Append an SVG group
+var chartGroup = svg.append("g")
+  .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+// Initial Params
+var chosenXAxis = "hair_length";
 
 // Format the Data
     demodata.forEach(function(data) {
@@ -66,7 +74,7 @@ chartGroup.selectAll(".plot")
     .attr("y", d => yScale(d))
     .attr("width", xScale.bandwidth())
     .attr("height", d => chartHeight - yScale(d));
-    
+
    // Create axis functions
     var bottomAxis = d3.axisBottom(xSmokersScale)
     .tickFormat(d3.timeFormat("%d-%b-%Y"));
@@ -82,6 +90,17 @@ chartGroup.selectAll(".plot")
     .classed("blue", true)
     .call(leftAxis);
 
+    // append initial circles
+  var circlesGroup = chartGroup.selectAll("circle")
+    .data(hairData)
+    .enter()
+    .append("circle")
+    .attr("cx", d => xLinearScale(d[chosenXAxis]))
+    .attr("cy", d => yLinearScale(d.num_hits))
+    .attr("r", 20)
+    .attr("fill", "pink")
+    .attr("opacity", ".5");
+
 
 // Append axes titles
 chartGroup.selectAll(".plot")
@@ -95,3 +114,9 @@ chartGroup.selectAll(".plot")
   .attr("height", d => chartHeight - yScale(d));
 }
 });
+
+
+d3.csv("./data.csv").then(function(demoData) {
+
+    console.log(data);
+ 
