@@ -45,6 +45,24 @@ function makeResponsive() {
                 .domain([0, d3.max(demoData, d => d.age)])
                 .range([height, 0]);
 
+
+            // Create axis functions
+            var xAxis = d3.axisBottom(xSmokersScale).tickFormat(d3.timeFormat("%d-%b-%Y"));
+            var leftAxis = d3.axisLeft(yLinearScale1);
+
+             // Add x-axis
+            chartGroup.append("g")
+                .attr("transform", `translate(0, ${height})`)
+                .call(xAxis);
+
+            // Add y1-axis to the left side of the display
+            chartGroup.append("g")
+                .classed("blue", true)
+                .call(leftAxis);
+
+
+
+
 // function used for updating circles group with a transition to
 // new circles
 function renderCircles(circlesGroup, newXScale, chosenXAxis) {
